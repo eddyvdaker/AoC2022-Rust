@@ -1,18 +1,17 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
-fn most_calories(calorie_lists: &Vec<Vec<i32>>) -> i32 {
-    let mut max_calories = 0;
+fn calories(calorie_lists: &Vec<Vec<i32>>) -> Vec<i32> {
+    let mut sums: Vec<i32> = Vec::new();
     for sub_list in calorie_lists {
         let mut sub_list_sum = 0;
         for item in sub_list {
             sub_list_sum += item;
         }
-        if sub_list_sum > max_calories {
-            max_calories = sub_list_sum;
-        }
+        sums.push(sub_list_sum);
     }
-    max_calories
+    sums.sort();
+    sums
 }
 
 fn read_file(file_path: &str) -> Vec<Vec<i32>> {
@@ -40,6 +39,9 @@ fn read_file(file_path: &str) -> Vec<Vec<i32>> {
 
 pub fn run_day1() {
     let lists = read_file("./inputs/day1-input.txt");
-    let result = most_calories(&lists);
-    println!("most amount of calories {}", result);
+    let sums = calories(&lists);
+    println!("Top 3 amount of calories:\n1) {}\n2) {}\n3) {}", sums[sums.len() - 1],
+        sums[sums.len() - 2], sums[sums.len() - 3]);
+    let top_3_total = sums[sums.len() - 1] + sums[sums.len() - 2] + sums[sums.len() - 3];
+    println!("Top 3 total: {}", top_3_total);
 }
